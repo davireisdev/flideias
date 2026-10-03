@@ -203,6 +203,7 @@ O elemento decorativo assinatura do sistema são as **nebulosas de fundo**: trê
 - **Style:** fundo branco a 5%, borda de 1px branca a 10%, `rounded-2xl` (textareas) ou `rounded-xl` (inputs de linha única).
 - **Focus:** a borda muda para Violeta Profundo a 100% de opacidade (60% media só 2.24:1 — abaixo do piso de 3:1 não-textual) e o fundo clareia ligeiramente (branco a 7%) — sem `outline` do navegador, sem anel de foco separado.
 - **Placeholder:** branco a 50% de opacidade (piso AA — ver The AA Floor Rule).
+- **Campo de investimento** ("Quanto você pensa em investir?", logo antes do botão de envio): input de linha única com prefixo "R$" em branco a 50% dentro do campo, só números (reais inteiros, milhar formatado "1.500"), mínimo R$ 80 obrigatório. Erro no mesmo padrão da descrição: borda Violeta Profundo Claro a 70% + mensagem em Névoa Violeta ("Coloca um valor a partir de R$ 80 🙂"), mostrado no envio ou ao sair do campo com valor abaixo do mínimo.
 
 ### Navigation
 - Pílula fixa e centralizada (`rounded-full`, fundo Espaço Profundo a 70% + `backdrop-blur-lg`), com borda de 1px branca a 10%. Links em Inter 500, branco a 70%, ganham fundo branco a 10% e texto 100% no hover. Em mobile a pílula encolhe de largura mas mantém a mesma forma — não vira menu hambúrguer.

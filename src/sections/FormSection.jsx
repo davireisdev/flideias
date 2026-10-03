@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import AIAssistantPanel from '../components/form/AIAssistantPanel'
+import BudgetField, { MIN_BUDGET } from '../components/form/BudgetField'
 import ColorPreferencesField from '../components/form/ColorPreferencesField'
 import IdeaDescriptionField from '../components/form/IdeaDescriptionField'
 import ImageUploader from '../components/form/ImageUploader'
@@ -35,9 +36,11 @@ export default function FormSection() {
     const draft = readDraft().references
     return draft?.length ? draft : ['']
   })
+  const [budget, setBudget] = useState(() => readDraft().budget ?? '')
   const [images, setImages] = useState([])
   const [submitted, setSubmitted] = useState(false)
   const [descriptionError, setDescriptionError] = useState(false)
+  const [budgetError, setBudgetError] = useState(false)
 
   useEffect(() => {
     // Debounced: writing on every keystroke is unnecessary main-thread work.
@@ -45,7 +48,7 @@ export default function FormSection() {
       try {
         localStorage.setItem(
           DRAFT_KEY,
-          JSON.stringify({ description, selectedColors, colorNotes, references }),
+          JSON.stringify({ description, selectedColors, colorNotes, references, budget }),
         )
       } catch {
         // localStorage can throw (private browsing, quota) — best-effort only.
@@ -53,7 +56,7 @@ export default function FormSection() {
     }, 400)
 
     return () => clearTimeout(timeout)
-  }, [description, selectedColors, colorNotes, references])
+  }, [description, selectedColors, colorNotes, references, budget])
 
   const toggleColor = (colorId) => {
     setSelectedColors((current) =>
@@ -68,13 +71,27 @@ export default function FormSection() {
     if (descriptionError && value.trim()) setDescriptionError(false)
   }
 
+  const isBudgetValid = (value) => Number(value) >= MIN_BUDGET
+
+  const handleBudgetChange = (value) => {
+    setBudget(value)
+    if (budgetError && isBudgetValid(value)) setBudgetError(false)
+  }
+
+  // Only flag on blur once something was typed — an empty field the visitor
+  // hasn't reached yet isn't an error until they try to send.
+  const handleBudgetBlur = () => {
+    if (budget && !isBudgetValid(budget)) setBudgetError(true)
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    if (!description.trim()) {
-      setDescriptionError(true)
-      return
-    }
+    const descriptionMissing = !description.trim()
+    const budgetInvalid = !isBudgetValid(budget)
+    setDescriptionError(descriptionMissing)
+    setBudgetError(budgetInvalid)
+    if (descriptionMissing || budgetInvalid) return
 
     // TODO: integrate real submission (email/API) later.
     setSubmitted(true)
@@ -131,6 +148,13 @@ export default function FormSection() {
                 <ReferencesField references={references} onChange={setReferences} />
 
                 <ImageUploader images={images} onChange={setImages} />
+
+                <BudgetField
+                  value={budget}
+                  onChange={handleBudgetChange}
+                  onBlur={handleBudgetBlur}
+                  error={budgetError ? `Coloca um valor a partir de R$ ${MIN_BUDGET} 🙂` : null}
+                />
 
                 <div className="pt-2">
                   <Button type="submit">Enviar minha ideia</Button>
