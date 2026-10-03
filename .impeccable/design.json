@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-27T19:15:00Z",
+  "title": "Design System: flideias",
+  "extensions": {
+    "colorMeta": {
+      "violeta-profundo": {
+        "role": "primary",
+        "displayName": "Violeta Profundo",
+        "canonical": "#8b5cf6",
+        "tonalRamp": ["#140d24", "#23163f", "#341f5c", "#4a2c82", "#7c3aed", "#8b5cf6", "#a78bfa", "#c4b5fd"]
+      },
+      "ametista-profunda": {
+        "role": "primary-fill",
+        "displayName": "Ametista Profunda",
+        "canonical": "#7c3aed",
+        "note": "Único tom da família violeta usado como fundo sólido com texto branco (5.7:1 AA). #8b5cf6 mede só 4.2:1 e falha.",
+        "tonalRamp": ["#140d24", "#23163f", "#341f5c", "#4a2c82", "#6d28d9", "#7c3aed", "#8b5cf6", "#a78bfa"]
+      },
+      "vazio-estelar": {
+        "role": "neutral",
+        "displayName": "Vazio Estelar",
+        "canonical": "#06060b",
+        "tonalRamp": ["#06060b", "#0b0b14", "#101018", "#16161f", "#1f1f2b", "#2a2a3a", "#6b6b7a", "#f4f3fb"]
+      },
+      "ciano-suave": {
+        "role": "tertiary",
+        "displayName": "Ciano Suave",
+        "canonical": "#22d3ee",
+        "tonalRamp": ["#052e34", "#0a4a54", "#0e6e7a", "#149aad", "#1bc0d6", "#22d3ee", "#67e8f9", "#bff5fc"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Título principal da seção Intro. Aparece uma única vez por página." },
+      "headline": { "displayName": "Headline", "purpose": "Título de cada seção (Formulário, Encerramento)." },
+      "title": { "displayName": "Title", "purpose": "Cabeçalhos pequenos: nome da marca no menu, título do painel do assistente de IA." },
+      "body": { "displayName": "Body", "purpose": "Parágrafos, campos de formulário, texto de botões." },
+      "label": { "displayName": "Label", "purpose": "Selo eyebrow, links do menu, dicas de campo, uppercase tracking-wider." }
+    },
+    "shadows": [
+      { "name": "accent-glow", "value": "0 10px 15px -3px rgba(139,92,246,0.25), 0 4px 6px -4px rgba(139,92,246,0.25)", "purpose": "Exclusivo do botão primário; sinaliza a ação principal da tela." },
+      { "name": "grounding", "value": "0 25px 50px -12px rgba(0,0,0,0.4)", "purpose": "Ancora mídia grande (moldura do vídeo, modal); nunca usada em cards de texto." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Transições padrão de cor/fundo em botões, links e campos (200ms)." },
+      { "name": "press-scale", "value": "transform 150ms ease-standard", "purpose": "Leve scale(0.95) ao clicar em botões, para resposta tátil sem exagero." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal — sempre em pílula, fundo Ametista Profunda (não Violeta Profundo — precisa do tom mais escuro para passar em 4.5:1 AA com texto branco), glow de sombra colorida.",
+      "html": "<button class=\"ds-btn-primary\">Enviar minha ideia</button>",
+      "css": ".ds-btn-primary { background: #7c3aed; color: #ffffff; border: none; border-radius: 9999px; padding: 12px 24px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 500; box-shadow: 0 10px 15px -3px rgba(124,58,237,0.25), 0 4px 6px -4px rgba(124,58,237,0.25); transition: background-color 200ms cubic-bezier(0.4,0,0.2,1), transform 150ms cubic-bezier(0.4,0,0.2,1); cursor: pointer; } .ds-btn-primary:hover { background: #6d28d9; } .ds-btn-primary:focus-visible { outline: 2px solid #c4b5fd; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.95); } .ds-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Ação secundária — fundo translúcido, sem sombra, mesma forma em pílula.",
+      "html": "<button class=\"ds-btn-ghost\">Contar minha ideia</button>",
+      "css": ".ds-btn-ghost { background: rgba(255,255,255,0.05); color: #ffffff; border: 1px solid rgba(255,255,255,0.1); border-radius: 9999px; padding: 12px 24px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 500; transition: background-color 200ms cubic-bezier(0.4,0,0.2,1), transform 150ms cubic-bezier(0.4,0,0.2,1); cursor: pointer; } .ds-btn-ghost:hover { background: rgba(255,255,255,0.1); } .ds-btn-ghost:focus-visible { outline: 2px solid #c4b5fd; outline-offset: 2px; } .ds-btn-ghost:active { transform: scale(0.95); }"
+    },
+    {
+      "name": "Nav Pill",
+      "kind": "nav",
+      "refersTo": "nav-pill",
+      "description": "Navegação fixa, centralizada, flutuando sobre o conteúdo com vidro fosco.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-logo\">fl<span class=\"ds-nav-logo-accent\">ideias</span></span><ul class=\"ds-nav-links\"><li><a href=\"#\" class=\"ds-nav-link\">Início</a></li><li><a href=\"#\" class=\"ds-nav-link\">Sua ideia</a></li><li><a href=\"#\" class=\"ds-nav-link\">Pronto</a></li></ul></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: rgba(11,11,20,0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); border-radius: 9999px; padding: 12px 20px; } .ds-nav-logo { font-family: Sora, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; color: #ffffff; } .ds-nav-logo-accent { color: #a78bfa; } .ds-nav-links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; } .ds-nav-link { display: inline-block; padding: 6px 12px; border-radius: 9999px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none; transition: background-color 200ms cubic-bezier(0.4,0,0.2,1), color 200ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-link:hover, .ds-nav-link:focus-visible { background: rgba(255,255,255,0.1); color: #ffffff; }"
+    },
+    {
+      "name": "Card Panel",
+      "kind": "card",
+      "refersTo": "card-panel",
+      "description": "Painel de vidro fosco sem sombra — usado no formulário e no assistente de IA.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Assistente de criação</h3><p class=\"ds-card-body\">Em breve, vou te ajudar a lapidar sua ideia por aqui enquanto você escreve.</p></div>",
+      "css": ".ds-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 32px; } .ds-card-title { margin: 0 0 12px; font-family: Sora, ui-sans-serif, system-ui, sans-serif; font-size: 14px; font-weight: 600; color: #ffffff; } .ds-card-body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.7); }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Campo de texto translúcido; a borda vira violeta no foco, sem outline do navegador.",
+      "html": "<textarea class=\"ds-input\" rows=\"4\" placeholder=\"Descreva a ideia do seu site...\"></textarea>",
+      "css": ".ds-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 16px; color: #ffffff; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 14px; line-height: 1.5; resize: none; outline: none; transition: border-color 200ms cubic-bezier(0.4,0,0.2,1), background-color 200ms cubic-bezier(0.4,0,0.2,1); } .ds-input::placeholder { color: rgba(255,255,255,0.5); } .ds-input:focus { border-color: rgb(139,92,246); background: rgba(255,255,255,0.07); }"
+    },
+    {
+      "name": "Eyebrow Chip",
+      "kind": "chip",
+      "refersTo": "chip-eyebrow",
+      "description": "Selo pequeno uppercase que antecede um título de seção.",
+      "html": "<span class=\"ds-chip-eyebrow\">Criação de sites sob medida</span>",
+      "css": ".ds-chip-eyebrow { display: inline-flex; align-items: center; border: 1px solid rgba(139,92,246,0.3); background: rgba(139,92,246,0.1); color: #c4b5fd; border-radius: 9999px; padding: 4px 16px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }"
+    },
+    {
+      "name": "Video Play FAB",
+      "kind": "custom",
+      "refersTo": "video-play-fab",
+      "description": "Componente assinatura: botão circular branco sólido sobre a moldura escura do vídeo, único elemento de alto contraste do sistema.",
+      "html": "<button class=\"ds-play-fab\" aria-label=\"Assistir vídeo\"><svg viewBox=\"0 0 24 24\" fill=\"currentColor\" class=\"ds-play-icon\"><path d=\"M8 5v14l11-7z\"/></svg></button>",
+      "css": ".ds-play-fab { display: flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 9999px; background: #ffffff; color: #06060b; border: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); transition: transform 200ms cubic-bezier(0.4,0,0.2,1); cursor: pointer; } .ds-play-fab:hover { transform: scale(1.1); } .ds-play-fab:focus-visible { outline: 2px solid #c4b5fd; outline-offset: 3px; } .ds-play-icon { width: 28px; height: 28px; margin-left: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Constelação Quieta",
+    "overview": "O sistema vive num céu quase preto onde a luz não pisca — ela deriva. Grandes nebulosas de gradiente (violeta e ciano, borradas a 120px) flutuam atrás do conteúdo como se o fundo respirasse devagar; nada sobre ele é abrupto. É um espaço confiante e contido, não um palco: a luz existe para orientar o olhar, não para gritar por atenção. Vidro fosco — painéis translúcidos com borda fina e quase nenhuma sombra — substitui a profundidade tradicional por camadas discretas, reforçando a sensação de calma premium em vez de peso corporativo.\n\nA tipografia segue a mesma lógica dupla: Sora nos títulos dá presença geométrica e confiante; Inter no corpo mantém tudo legível e sem fricção. A cor é usada com parcimônia — violeta profundo aparece só onde importa (ação primária, destaque de marca, foco), e o ciano quase nunca sai do fundo, como uma estrela distante que só se nota se você procurar.",
+    "keyCharacteristics": [
+      "Fundo quase preto com nebulosas de gradiente borradas como único elemento decorativo recorrente.",
+      "Painéis de vidro fosco: fundo branco a 2–5% de opacidade, borda de 1px branca a 10%, sem sombra em repouso.",
+      "Cantos generosamente arredondados em toda parte — nunca um canto reto.",
+      "Um único acento vibrante (família violeta) carrega quase todo o peso cromático; ciano é ambiente, não interativo.",
+      "Hierarquia de texto construída por opacidade do branco (100% → 50%, nunca abaixo — piso AA), não por trocar de cor."
+    ],
+    "rules": [
+      { "name": "The One Star Rule", "body": "Só a família violeta é interativa. Ciano vive exclusivamente no fundo decorativo — se um elemento precisa comunicar \"clique aqui\" ou \"isto está em foco\", a resposta é sempre um tom da família violeta.", "section": "colors" },
+      { "name": "The AA Floor Rule", "body": "Nenhum texto real fica abaixo de white/50 de opacidade, e nenhum par texto-sobre-cor é usado sem checar 4.5:1 primeiro. O botão primário usa Ametista Profunda (#7c3aed, 5.7:1), não Violeta Profundo (#8b5cf6, 4.2:1 — falha AA).", "section": "colors" },
+      { "name": "The Display-Once Rule", "body": "O tamanho Display é reservado ao H1 da Intro. Nenhuma outra seção compete com ele — Headline é o teto para todo o resto, mesmo em telas grandes.", "section": "typography" },
+      { "name": "The Flat-Panel Rule", "body": "Cards e painéis de conteúdo (formulário, assistente de IA, moldura da referência) nunca recebem box-shadow. Se algo parece precisar de mais destaque, a resposta é ajustar borda/opacidade, não adicionar sombra.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do manter a família violeta como a única cor interativa; ciano fica no fundo.",
+      "Do usar opacidade de branco, nunca abaixo de 50%, para criar hierarquia de texto.",
+      "Do arredondar tudo — pílula para controles, rounded-3xl para painéis, nunca cantos retos.",
+      "Do reservar sombra para o botão primário (glow) e para mídia grande (grounding shadow).",
+      "Do medir contraste (4.5:1) antes de fixar um novo par texto-sobre-cor."
+    ],
+    "donts": [
+      "Don't adicionar box-shadow a cards ou painéis de conteúdo — a profundidade vem de borda + opacidade, não de sombra.",
+      "Don't usar branco puro (#ffffff) como cor de texto de corpo — o padrão é Luz das Estrelas (#f4f3fb) ou branco com opacidade reduzida.",
+      "Don't introduzir uma segunda cor de ação. Um CTA nunca compete em cor com o botão primário.",
+      "Don't aplicar backdrop-blur a elementos que não estão flutuando sobre o conteúdo (cards estáticos ficam de fora)."
+    ]
+  }
+}

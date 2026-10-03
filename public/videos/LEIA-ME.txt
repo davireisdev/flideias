@@ -1,0 +1,3 @@
+Coloque aqui o arquivo de vídeo com o nome "apresentacao.mp4"
+(ou ajuste a prop `src` do componente VideoPlayer em
+src/sections/IntroSection.jsx para apontar para outro caminho).

@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
+
+  --color-base-950: #06060b;
+  --color-base-900: #0b0b14;
+  --color-base-850: #101018;
+  --color-base-800: #16161f;
+  --color-base-700: #1f1f2b;
+  --color-base-600: #2a2a3a;
+
+  --color-accent-300: #c4b5fd;
+  --color-accent-400: #a78bfa;
+  --color-accent-500: #8b5cf6;
+  --color-accent-600: #7c3aed;
+  --color-accent-700: #6d28d9;
+
+  --color-glow-300: #67e8f9;
+  --color-glow-400: #22d3ee;
+
+  --animate-fade-up: fade-up 0.7s ease-out both;
+  --animate-drift: drift 2.4s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(5px);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* The scroll-cue chevron drifts forever; that's exactly the kind of
+   auto-playing, >5s motion WCAG 2.2.2 requires a way to stop. Everything
+   else (hover/focus transitions, the one-shot fade-up on load) stays as-is
+   since it's brief and not auto-looping. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift {
+    animation: none;
+  }
+}
+
+body {
+  background-color: var(--color-base-950);
+  color: #f4f3fb;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-accent-500);
+  color: white;
+}
+
+/* Minimal, unobtrusive scrollbar for the webkit browsers */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-950);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-700);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-base-600);
+}
