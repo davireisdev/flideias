@@ -3,11 +3,12 @@ export default function SectionHeading({
   title,
   subtitle,
   align = 'center',
+  ...props
 }) {
   const alignment = align === 'left' ? 'items-start text-left' : 'items-center text-center'
 
   return (
-    <div className={`flex flex-col gap-4 ${alignment}`}>
+    <div className={`flex flex-col gap-4 ${alignment}`} {...props}>
       {eyebrow && (
         <span className="inline-flex w-fit items-center rounded-full border border-accent-500/30 bg-accent-500/10 px-4 py-1 text-xs font-medium uppercase tracking-wider text-accent-300">
           {eyebrow}

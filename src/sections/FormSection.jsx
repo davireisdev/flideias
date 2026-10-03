@@ -5,6 +5,7 @@ import ColorPreferencesField from '../components/form/ColorPreferencesField'
 import IdeaDescriptionField from '../components/form/IdeaDescriptionField'
 import ImageUploader from '../components/form/ImageUploader'
 import ReferencesField from '../components/form/ReferencesField'
+import LightRibbons from '../components/layout/LightRibbons'
 import SocialLinks from '../components/social/SocialLinks'
 import Button from '../components/ui/Button'
 import Container from '../components/ui/Container'
@@ -103,9 +104,11 @@ export default function FormSection() {
   }
 
   return (
-    <section id="formulario" className="scroll-mt-24 py-24 sm:py-32">
-      <Container>
+    <section id="formulario" className="relative scroll-mt-24 py-24 sm:py-32">
+      <LightRibbons />
+      <Container className="relative z-10">
         <SectionHeading
+          data-light-avoid="text"
           eyebrow="Sua ideia"
           title="Agora, conta pra gente"
           subtitle="Quanto mais detalhes, melhor a gente entende a sua visão. Não existe resposta errada."
@@ -115,7 +118,10 @@ export default function FormSection() {
           onSubmit={handleSubmit}
           className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start"
         >
-          <div className="flex flex-col gap-8 rounded-3xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+          <div
+            data-light-avoid="card"
+            className="flex flex-col gap-8 rounded-3xl border border-white/10 bg-white/[0.02] p-6 sm:p-8"
+          >
             {submitted ? (
               <div className="flex flex-col items-center gap-6 py-6 text-center">
                 <span className="text-4xl">🌱</span>
@@ -163,7 +169,7 @@ export default function FormSection() {
             )}
           </div>
 
-          <div className="lg:sticky lg:top-28">
+          <div data-light-avoid="card" className="lg:sticky lg:top-28">
             <AIAssistantPanel />
           </div>
         </form>

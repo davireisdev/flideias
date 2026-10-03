@@ -1,11 +1,13 @@
 import { ArrowUp } from 'lucide-react'
+import LightRibbons from '../components/layout/LightRibbons'
 import SocialLinks from '../components/social/SocialLinks'
 import Container from '../components/ui/Container'
 
 export default function ClosingSection() {
   return (
-    <section id="encerramento" className="scroll-mt-24 py-24 sm:py-32">
-      <Container className="flex flex-col items-center gap-8 text-center">
+    <section id="encerramento" className="relative scroll-mt-24 py-24 sm:py-32">
+      <LightRibbons />
+      <Container data-light-avoid="text" className="relative z-10 flex flex-col items-center gap-8 text-center">
         <span className="text-4xl">🌱</span>
 
         <div className="flex flex-col items-center gap-3">

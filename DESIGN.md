@@ -106,6 +106,8 @@ A tipografia segue a mesma lógica dupla: Sora nos títulos dá presença geomé
 ### Exceção deliberada: Intro Showcase
 A seção Intro (o carrossel de abertura, ver Components) é intencionalmente mais densa e ilustrada do que o resto do sistema — palavra gigante de fundo, ilustração central, ícones flutuantes, mais camadas de glow. É uma decisão consciente de identidade, não drift: a Formulário, o Encerramento e a Navegação continuam seguindo "A Constelação Quieta" à risca. A paleta não muda (mesmos tokens violeta/ametista/ciano) e **The One Star Rule ainda vale** — o ciano segue fora de texto, contorno e botão mesmo na Intro. O que muda é densidade visual e a presença de ilustração, só ali.
 
+**Única exceção fora da Intro (decisão do Davi, 2026-10-02):** a faixa de Feixes de Luz não para na Intro — continua como um só feixe pelo Formulário e pelo Encerramento. Ela nunca passa *por cima* de conteúdo: some atrás de cartões e se apaga em volta de texto (ver Components → Feixes de Luz), então a calma de leitura dessas seções se mantém.
+
 ## Colors
 
 Paleta sofisticada e contida: quase monocromática (violeta sobre uma escala de "espaço" quase preto), com o ciano reservado para o fundo, nunca para elementos interativos.
@@ -218,11 +220,23 @@ Substitui o hero estático na Intro. Por slide: uma **ilustração central** (c�
 
 Animação via GSAP: entrada com `back.out` nos ícones (staggered) e `power3.out` na palavra/ilustração ao trocar de slide; flutuação contínua dos ícones (`sine.inOut`, y ±10px, loop). Ambas desligam sob `prefers-reduced-motion` — a troca de slide vira instantânea, o loop de flutuação simplesmente não inicia.
 
+### Feixes de Luz (página inteira, exceção)
+Uma faixa sedosa de ~64 fios finos de luz que atravessa a página toda como um só feixe: entra pelo canto superior direito da Intro e desce pela lateral direita; no Formulário segue pela borda e pela coluna do assistente; cruza por baixo do formulário para a esquerda, contorna a coluna do Encerramento e sai pelo canto inferior direito (em telas < 1024px, com o formulário em coluna única, ela corre pela borda direita e aparece nos respiros entre os blocos). Torce devagar como uma fita em 3D. Fios externos em Violeta Profundo / Ametista Profunda / Violeta Profundo Claro; miolo em Névoa Violeta e ciano claro (`#67e8f9`) — o ciano continua só no fundo (The One Star Rule). Mistura aditiva (os cruzamentos brilham) + uma cópia em 1/4 da resolução borrada (`blur-xl`) para o halo, e poeira de partículas lavanda. A luz deriva, não pisca: tudo se move em senoides lentas.
+
+- **Como é montada:** cada seção tem sua camada `<LightRibbons />` (atrás do conteúdo, que fica em `relative z-10`), e o motor `lightField.js` desenha todas a partir do mesmo caminho (spline Catmull-Rom por pontos definidos em frações de cada seção), no mesmo quadro — por isso a luz rola junto com a página sem atraso e não tem emenda nas divisas. Cada canvas avança 64px além da sua seção (cortado nela) para o halo também não ter emenda.
+- **Nunca atrás de texto:** qualquer elemento com `data-light-avoid` apaga a luz em volta. `"text"` (títulos, blocos de texto: união dos filhos, borda suave de ~80px) e `"card"` (cartão do formulário, painel do assistente: a própria caixa, borda curta — o cartão parece estar na frente da luz). Re-medido a cada quadro e no mesmo quadro em que um bloco muda de tamanho (troca de slide). Medido no Chromium (contraste do pior pixel, com vs. sem luz): títulos, rótulos, dicas `white/50`, textos e rodapé do Formulário e do Encerramento ficam **idênticos**; título da Intro ≥ 14.6:1 em 40 amostras (16.96:1 sem luz); selo "Em breve" 4.67:1 (4.71:1 sem luz — halo da faixa passando rente ao painel; segue acima do AA).
+- **Desempenho:** 30 quadros/s (o movimento é lento), resolução limitada a 1.5x, só desenha as seções visíveis e só ±1 tela em volta da área visível. Medido no Chromium com GPU Intel UHD, parado na divisa Intro/Formulário (2 canvases): ~1–2 ms de CPU por quadro. Se um quadro passar de 6 ms (aparelho sem aceleração), cai para 36 fios em 1x; se ainda passar, congela num quadro parado.
+- **Movimento reduzido:** sob `prefers-reduced-motion` desenha um único quadro estático de cada seção e nunca anima.
+- Em telas < 640px: 40 fios e intensidade a 75%.
+
+### Transição Intro → Formulário
+O fundo próprio da Intro (Vazio Estelar + nebulosas do carrossel) se dissolve nos últimos 14rem (`mask-image` em gradiente), revelando a Nebulosa de Fundo global que continua no Formulário — sem linha de corte na troca de seção. A bolinha de vidro e os Feixes de Luz ficam fora dessa máscara para não desbotar. Medido: antes, o brilho médio saltava de 16.2 para 11.0 numa única linha de pixels na divisa; agora as linhas vizinhas à divisa ficam iguais (11.0/11.5).
+
 ### Voltar ao Início (Encerramento)
 Pílula discreta (`ArrowUp` + "Voltar ao início") entre os contatos e o copyright, linkando pra `#intro`. Mesmo tratamento visual do botão ghost — sem competir com os CTAs de WhatsApp/e-mail/Instagram acima dela.
 
 ### Glow d'Água (cursor, Formulário e Encerramento)
-Um glow violeta (`accent-500/15`, `blur-[100px]`) que segue o cursor com atraso (`lerp` a 7% por frame) em vez de grudar nele — a sensação de líquido escorrendo atrás do ponteiro, não uma luz colada no mouse. Só em desktop com mouse de verdade (`hover: hover` + `pointer: fine`); desliga inteiro sob `prefers-reduced-motion`, já que é decoração pura sem função. Não aparece sobre a Intro (que tem fundo próprio opaco) — só de Formulário pra baixo.
+Um glow violeta (`accent-500/15`, `blur-[100px]`) que segue o cursor com atraso (`lerp` a 7% por frame) em vez de grudar nele — a sensação de líquido escorrendo atrás do ponteiro, não uma luz colada no mouse. Só em desktop com mouse de verdade (`hover: hover` + `pointer: fine`); desliga inteiro sob `prefers-reduced-motion`, já que é decoração pura sem função. Não aparece sobre a Intro (que tem fundo próprio opaco) — só de Formulário pra baixo, e de leve nos últimos 14rem da Intro, onde esse fundo se dissolve.
 
 ## Do's and Don'ts
 

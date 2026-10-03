@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import LightRibbons from '../components/layout/LightRibbons'
 import Button from '../components/ui/Button'
 import Container from '../components/ui/Container'
 import { introSlides } from '../data/introCarouselSlides'
@@ -122,7 +123,7 @@ export default function IntroSection() {
       role="region"
       aria-roledescription="carrossel"
       aria-label="Como funciona"
-      className="relative flex min-h-screen scroll-mt-24 flex-col overflow-hidden bg-base-950"
+      className="relative flex min-h-screen scroll-mt-24 flex-col overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -132,13 +133,23 @@ export default function IntroSection() {
     >
       <span ref={liveRegionRef} role="status" className="sr-only" />
 
-      {/* Background wash — consistent across slides, only the foreground changes */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      {/* Background wash — consistent across slides, only the foreground changes.
+          Its last 14rem dissolve into the page's own background, so there's no
+          hard edge where the Intro ends and the Formulário begins. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-base-950"
+        style={{ maskImage: 'linear-gradient(to bottom, #000 calc(100% - 14rem), transparent)' }}
+      >
         <div className="absolute top-1/4 left-1/2 h-[40rem] w-[40rem] -translate-x-1/2 rounded-full bg-accent-500/20 blur-[130px]" />
         <div className="absolute -right-10 bottom-0 h-[28rem] w-[28rem] rounded-full bg-accent-600/15 blur-[120px]" />
         <div className="absolute bottom-10 left-0 h-64 w-64 rounded-full bg-glow-400/10 blur-[100px]" />
-        <div className="absolute bottom-[6%] left-[4%] hidden h-32 w-32 rounded-full bg-gradient-to-br from-accent-400/40 to-accent-700/40 blur-sm sm:block" />
       </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[6%] left-[4%] hidden h-32 w-32 rounded-full bg-gradient-to-br from-accent-400/40 to-accent-700/40 blur-sm sm:block"
+      />
+      <LightRibbons />
 
       <Container className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6 py-24 text-center">
         <div className="relative flex w-full items-center justify-center">
@@ -178,7 +189,7 @@ export default function IntroSection() {
           {slide.bgWord}
         </span>
 
-        <div className="relative z-10 flex flex-col items-center gap-4">
+        <div data-light-avoid="text" className="relative z-10 flex flex-col items-center gap-4">
           <h1 className="max-w-lg font-display text-2xl font-semibold text-white sm:text-3xl">
             {slide.title}
           </h1>
