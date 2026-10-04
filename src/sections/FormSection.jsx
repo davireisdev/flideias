@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import AIAssistantPanel from '../components/form/AIAssistantPanel'
 import BudgetField, { MIN_BUDGET } from '../components/form/BudgetField'
 import ColorPreferencesField from '../components/form/ColorPreferencesField'
+import ContactFields from '../components/form/ContactFields'
+import { isEmailValid, isNameValid, isWhatsappValid } from '../components/form/contactValidation'
 import IdeaDescriptionField from '../components/form/IdeaDescriptionField'
 import ImageUploader from '../components/form/ImageUploader'
 import ReferencesField from '../components/form/ReferencesField'
@@ -38,6 +40,10 @@ export default function FormSection() {
     return draft?.length ? draft : ['']
   })
   const [budget, setBudget] = useState(() => readDraft().budget ?? '')
+  const [contact, setContact] = useState(() => ({ name: '', whatsapp: '', email: '', ...readDraft().contact }))
+  const [contactErrors, setContactErrors] = useState({ name: false, whatsapp: false, email: false })
+  const [failedAttempts, setFailedAttempts] = useState(0)
+  const formRef = useRef(null)
   const [images, setImages] = useState([])
   const [submitted, setSubmitted] = useState(false)
   const [descriptionError, setDescriptionError] = useState(false)
@@ -49,7 +55,7 @@ export default function FormSection() {
       try {
         localStorage.setItem(
           DRAFT_KEY,
-          JSON.stringify({ description, selectedColors, colorNotes, references, budget }),
+          JSON.stringify({ description, selectedColors, colorNotes, references, budget, contact }),
         )
       } catch {
         // localStorage can throw (private browsing, quota) — best-effort only.
@@ -57,7 +63,18 @@ export default function FormSection() {
     }, 400)
 
     return () => clearTimeout(timeout)
-  }, [description, selectedColors, colorNotes, references, budget])
+  }, [description, selectedColors, colorNotes, references, budget, contact])
+
+  // After a blocked submit, take the visitor to the first field that needs
+  // attention — with several fields, the error could be far above the button.
+  useEffect(() => {
+    if (!failedAttempts) return
+    const first = formRef.current?.querySelector('[aria-invalid="true"]')
+    if (first) {
+      first.focus({ preventScroll: true })
+      first.scrollIntoView({ block: 'center' })
+    }
+  }, [failedAttempts])
 
   const toggleColor = (colorId) => {
     setSelectedColors((current) =>
@@ -85,14 +102,40 @@ export default function FormSection() {
     if (budget && !isBudgetValid(budget)) setBudgetError(true)
   }
 
+  const contactValidators = { name: isNameValid, whatsapp: isWhatsappValid, email: isEmailValid }
+
+  const handleContactChange = (field, value) => {
+    setContact((current) => ({ ...current, [field]: value }))
+    if (contactErrors[field] && contactValidators[field](value)) {
+      setContactErrors((current) => ({ ...current, [field]: false }))
+    }
+  }
+
+  // Same rule as the budget: an untouched empty field only becomes an error on send.
+  const handleContactBlur = (field) => {
+    const value = contact[field]
+    if (value.trim() && !contactValidators[field](value)) {
+      setContactErrors((current) => ({ ...current, [field]: true }))
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
     const descriptionMissing = !description.trim()
     const budgetInvalid = !isBudgetValid(budget)
+    const nextContactErrors = {
+      name: !isNameValid(contact.name),
+      whatsapp: !isWhatsappValid(contact.whatsapp),
+      email: !isEmailValid(contact.email),
+    }
     setDescriptionError(descriptionMissing)
     setBudgetError(budgetInvalid)
-    if (descriptionMissing || budgetInvalid) return
+    setContactErrors(nextContactErrors)
+    if (descriptionMissing || budgetInvalid || Object.values(nextContactErrors).some(Boolean)) {
+      setFailedAttempts((n) => n + 1)
+      return
+    }
 
     // TODO: integrate real submission (email/API) later.
     setSubmitted(true)
@@ -115,6 +158,8 @@ export default function FormSection() {
         />
 
         <form
+          ref={formRef}
+          noValidate
           onSubmit={handleSubmit}
           className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start"
         >
@@ -160,6 +205,13 @@ export default function FormSection() {
                   onChange={handleBudgetChange}
                   onBlur={handleBudgetBlur}
                   error={budgetError ? `Coloca um valor a partir de R$ ${MIN_BUDGET} 🙂` : null}
+                />
+
+                <ContactFields
+                  value={contact}
+                  errors={contactErrors}
+                  onChange={handleContactChange}
+                  onBlur={handleContactBlur}
                 />
 
                 <div className="pt-2">
