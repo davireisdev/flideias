@@ -14,6 +14,7 @@ import path from 'node:path'
 
 const MIN_BUDGET = 80 // mesmo mínimo de src/components/form/BudgetField.jsx
 const MAX_IMAGES = 8
+const MIN_FILL_MS = 3000 // ninguém lê, escreve e envia em menos de 3 s
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const COLORS = ['Escuro e sofisticado', 'Claro e neutro', 'Azul, confiança', 'Verde, natural', 'Quente, energético', 'Rosa, delicado']
@@ -119,7 +120,20 @@ export function montarEmail(d) {
  * @param opcoes.testeLocal em desenvolvimento sem chave: salva o e-mail em
  *        tmp-envios/ em vez de enviar (nunca usado no site publicado)
  */
+/** Robô? Campo-isca preenchido ou formulário enviado rápido demais. */
+export function pareceRobo(body) {
+  if (!body || typeof body !== 'object') return false
+  const iscaPreenchida = typeof body.site === 'string' && body.site.trim() !== ''
+  const tempo = Number(body.tempo)
+  return iscaPreenchida || (Number.isFinite(tempo) && tempo < MIN_FILL_MS)
+}
+
 export async function processarIdeia(body, env, { testeLocal = false } = {}) {
+  // Responde "ok" para o robô não aprender a desviar — só não envia nada.
+  if (pareceRobo(body)) {
+    console.warn('[enviar-ideia] envio descartado: parece robô')
+    return { status: 200, json: { ok: true } }
+  }
   const { erros, dados } = validar(body)
   if (erros.length) return { status: 400, json: { ok: false, erro: 'dados-invalidos', detalhes: erros } }
 

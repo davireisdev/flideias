@@ -46,6 +46,10 @@ export default function FormSection() {
   const [contactErrors, setContactErrors] = useState({ name: false, whatsapp: false, email: false })
   const [failedAttempts, setFailedAttempts] = useState(0)
   const formRef = useRef(null)
+  // Anti-spam: robots fill every field (incl. the hidden "site" honeypot) and
+  // submit instantly; the server silently drops both (api/_ideia.js).
+  const [openedAt] = useState(() => Date.now())
+  const honeypotRef = useRef(null)
   const [images, setImages] = useState([])
   const [submitted, setSubmitted] = useState(false)
   const [sendState, setSendState] = useState('idle') // idle | sending | error
@@ -153,6 +157,8 @@ export default function FormSection() {
         whatsapp: contact.whatsapp,
         email: contact.email,
         images,
+        site: honeypotRef.current?.value ?? '',
+        tempo: Date.now() - openedAt,
       })
     } catch {
       // Nothing is lost: the fields stay filled and the draft is kept.
@@ -228,6 +234,12 @@ export default function FormSection() {
                   onBlur={handleBudgetBlur}
                   error={budgetError ? `Coloca um valor a partir de R$ ${MIN_BUDGET} 🙂` : null}
                 />
+
+                {/* Campo-isca: invisível para pessoas e leitores de tela; robôs preenchem. */}
+                <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+                  <label htmlFor="site">Não preencha este campo</label>
+                  <input ref={honeypotRef} id="site" name="site" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
+                </div>
 
                 <ContactFields
                   value={contact}

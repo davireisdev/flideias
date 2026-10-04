@@ -29,6 +29,7 @@ Davi atende sozinho, sem equipe ou processo de vendas formal; cada lead recebido
 ## Capabilities and Constraints
 
 - Envio do formulário: função da Vercel (`api/enviar-ideia.js`) que valida tudo de novo no servidor e manda a ideia por e-mail via Resend, com as imagens reduzidas no navegador e anexadas (até 8). Sem a chave do Resend configurada, o site mostra um aviso de erro com os contatos em vez de fingir sucesso; o rascunho só é apagado depois de um envio que deu certo. Sem domínio próprio, o Resend só envia para o e-mail da própria conta (é para onde as ideias vão).
+- Anti-spam: campo-isca invisível (`site`) + tempo mínimo de 3 s entre abrir a página e enviar. O servidor responde "ok" a esses envios (para o robô não aprender) e não manda e-mail.
 - Assistente de IA: componente reservado (`AIAssistantPanel`) sem lógica implementada; entra depois, sem requisitos definidos ainda.
 - Upload de imagens de inspiração é local (preview via object URL no navegador); não há armazenamento remoto ainda.
 - Site é single-page com 3 seções (Intro, Formulário, Encerramento) e scroll suave entre elas.
