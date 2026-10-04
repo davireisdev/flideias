@@ -170,14 +170,11 @@ export default function IntroSection() {
           <div
             ref={centralRef}
             aria-hidden="true"
-            className="relative flex h-56 w-56 flex-col items-center justify-center gap-7 rounded-full border border-white/10 bg-white/[0.04] shadow-2xl shadow-accent-600/20 backdrop-blur-sm sm:h-72 sm:w-72"
+            className="relative flex h-56 w-56 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] shadow-2xl shadow-accent-600/20 backdrop-blur-sm sm:h-72 sm:w-72"
           >
             {CentralIcon && (
               <CentralIcon className="h-20 w-20 text-accent-300 sm:h-24 sm:w-24" strokeWidth={1.5} />
             )}
-            <span className="px-4 text-center text-[10px] tracking-wider text-white/40 uppercase">
-              {slide.centralLabel}
-            </span>
           </div>
         </div>
 

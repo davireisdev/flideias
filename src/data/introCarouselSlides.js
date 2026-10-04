@@ -8,7 +8,6 @@ export const introSlides = [
     id: 'ideia',
     bgWord: 'IDEIA',
     centralIcon: 'Brain',
-    centralLabel: 'ilustração: cérebro',
     floatingIcons: [
       { icon: 'Lightbulb', position: 'top-[8%] right-[18%]' },
       { icon: 'Lightbulb', position: 'top-[38%] left-[6%]' },
@@ -21,7 +20,6 @@ export const introSlides = [
     id: 'inteligencia',
     bgWord: 'INTELIGÊNCIA',
     centralIcon: 'Bot',
-    centralLabel: 'ilustração: mascote IA',
     floatingIcons: [
       { icon: 'Palette', position: 'top-[10%] left-[14%]' },
       { icon: 'Link2', position: 'top-[6%] right-[16%]' },
@@ -34,7 +32,6 @@ export const introSlides = [
     id: 'enviado',
     bgWord: 'ENVIADO',
     centralIcon: 'Bot',
-    centralLabel: 'ilustração: mascote comemorando',
     floatingIcons: [
       { icon: 'Mail', position: 'top-[10%] left-[10%]' },
       { icon: 'Mail', position: 'bottom-[16%] right-[12%]' },
