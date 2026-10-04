@@ -249,6 +249,12 @@ export default function FormSection() {
                 />
 
                 <div className="flex flex-col gap-4 pt-2">
+                  {/* LGPD: para que os dados servem e como pedir para apagar, antes do envio */}
+                  <p className="text-xs text-white/50">
+                    Seu nome, WhatsApp e e-mail servem só pra gente conversar sobre a sua ideia — nada
+                    de lista de divulgação, e não repassamos pra ninguém. Quer que a gente apague seus
+                    dados depois? É só pedir pelo WhatsApp ou e-mail.
+                  </p>
                   <Button type="submit" disabled={sendState === 'sending'} className="self-start">
                     {sendState === 'sending' ? 'Enviando…' : 'Enviar minha ideia'}
                   </Button>
