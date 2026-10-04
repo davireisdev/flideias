@@ -22,13 +22,13 @@ Em vez de um formulário de contato genérico (nome/e-mail/mensagem) ou um link 
 
 ## Operating Context
 
-Fluxo do visitante: assiste a um vídeo curto de introdução → lê a seção de formulário → preenche descrição aberta, seleciona/descreve cores, adiciona referências e sobe imagens de inspiração → envia (hoje o envio só guarda estado local, sem back-end) → vê uma seção de encerramento leve com os contatos de flideias para quem preferir falar direto.
+Fluxo do visitante: assiste a um vídeo curto de introdução → lê a seção de formulário → preenche descrição aberta, seleciona/descreve cores, adiciona referências e sobe imagens de inspiração → informa nome e WhatsApp (e-mail opcional) e quanto pensa investir (a partir de R$ 80) → envia (a ideia chega por e-mail para o Davi, com as imagens anexadas) → vê uma seção de encerramento leve com os contatos de flideias para quem preferir falar direto.
 
 Davi atende sozinho, sem equipe ou processo de vendas formal; cada lead recebido é respondido manualmente por ele.
 
 ## Capabilities and Constraints
 
-- Envio do formulário: propositalmente sem back-end/e-mail conectado ainda. É uma questão de tempo, não uma restrição de ferramenta — não há serviço (Resend, EmailJS, CRM etc.) já decidido.
+- Envio do formulário: função da Vercel (`api/enviar-ideia.js`) que valida tudo de novo no servidor e manda a ideia por e-mail via Resend, com as imagens reduzidas no navegador e anexadas (até 8). Sem a chave do Resend configurada, o site mostra um aviso de erro com os contatos em vez de fingir sucesso; o rascunho só é apagado depois de um envio que deu certo. Sem domínio próprio, o Resend só envia para o e-mail da própria conta (é para onde as ideias vão).
 - Assistente de IA: componente reservado (`AIAssistantPanel`) sem lógica implementada; entra depois, sem requisitos definidos ainda.
 - Upload de imagens de inspiração é local (preview via object URL no navegador); não há armazenamento remoto ainda.
 - Site é single-page com 3 seções (Intro, Formulário, Encerramento) e scroll suave entre elas.

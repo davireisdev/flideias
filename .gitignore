@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# envios de teste locais (modo dev sem chave do Resend)
+tmp-envios

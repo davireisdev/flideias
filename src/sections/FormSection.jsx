@@ -12,10 +12,12 @@ import SocialLinks from '../components/social/SocialLinks'
 import Button from '../components/ui/Button'
 import Container from '../components/ui/Container'
 import SectionHeading from '../components/ui/SectionHeading'
+import { colorPalette } from '../data/colorPalette'
+import { enviarIdeia } from '../lib/enviarIdeia'
 
-// NOTE: submission is intentionally not wired up to any backend/email yet.
-// This keeps the form data in local state (plus a localStorage draft as a
-// safety net against accidental refresh/reload) so the UI is fully usable.
+// Submission goes to /api/enviar-ideia (Vercel function → e-mail to Davi,
+// see api/_ideia.js). The localStorage draft stays as a safety net against
+// an accidental refresh — and it's only cleared once the send succeeded.
 const DRAFT_KEY = 'flideias-form-draft'
 
 // Read once, synchronously, so restored state can seed useState's lazy
@@ -46,6 +48,7 @@ export default function FormSection() {
   const formRef = useRef(null)
   const [images, setImages] = useState([])
   const [submitted, setSubmitted] = useState(false)
+  const [sendState, setSendState] = useState('idle') // idle | sending | error
   const [descriptionError, setDescriptionError] = useState(false)
   const [budgetError, setBudgetError] = useState(false)
 
@@ -119,8 +122,9 @@ export default function FormSection() {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+    if (sendState === 'sending') return
 
     const descriptionMissing = !description.trim()
     const budgetInvalid = !isBudgetValid(budget)
@@ -137,7 +141,25 @@ export default function FormSection() {
       return
     }
 
-    // TODO: integrate real submission (email/API) later.
+    setSendState('sending')
+    try {
+      await enviarIdeia({
+        descricao: description,
+        cores: colorPalette.filter((c) => selectedColors.includes(c.id)).map((c) => c.label),
+        notasCores: colorNotes,
+        referencias: references,
+        investimento: Number(budget),
+        nome: contact.name,
+        whatsapp: contact.whatsapp,
+        email: contact.email,
+        images,
+      })
+    } catch {
+      // Nothing is lost: the fields stay filled and the draft is kept.
+      setSendState('error')
+      return
+    }
+    setSendState('idle')
     setSubmitted(true)
     try {
       localStorage.removeItem(DRAFT_KEY)
@@ -214,8 +236,19 @@ export default function FormSection() {
                   onBlur={handleContactBlur}
                 />
 
-                <div className="pt-2">
-                  <Button type="submit">Enviar minha ideia</Button>
+                <div className="flex flex-col gap-4 pt-2">
+                  <Button type="submit" disabled={sendState === 'sending'} className="self-start">
+                    {sendState === 'sending' ? 'Enviando…' : 'Enviar minha ideia'}
+                  </Button>
+                  {sendState === 'error' && (
+                    <div role="alert" className="flex flex-col gap-3">
+                      <p className="text-sm text-accent-300">
+                        Não deu pra enviar agora 😕 Tudo que você escreveu continua aqui — tenta de novo
+                        em instantes ou me chama direto:
+                      </p>
+                      <SocialLinks />
+                    </div>
+                  )}
                 </div>
               </>
             )}

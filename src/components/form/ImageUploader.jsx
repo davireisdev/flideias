@@ -1,5 +1,6 @@
 import { ImagePlus, X } from 'lucide-react'
 import { useId, useRef, useState } from 'react'
+import { MAX_IMAGES } from '../../lib/enviarIdeia'
 import FieldShell from './FieldShell'
 
 /**
@@ -13,8 +14,11 @@ export default function ImageUploader({ images, onChange }) {
   const [isDragging, setIsDragging] = useState(false)
 
   const addFiles = (fileList) => {
+    // Até MAX_IMAGES: cada uma vai anexada no e-mail (já reduzida), e o envio
+    // inteiro precisa caber no limite da função da Vercel.
     const newImages = Array.from(fileList)
       .filter((file) => file.type.startsWith('image/'))
+      .slice(0, Math.max(0, MAX_IMAGES - images.length))
       .map((file) => ({
         id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2)}`,
         file,
@@ -40,7 +44,7 @@ export default function ImageUploader({ images, onChange }) {
     <FieldShell
       id={id}
       label="Imagens de inspiração"
-      hint="Prints, fotos ou imagens que representam o estilo que você imagina. Pode enviar várias."
+      hint={`Prints, fotos ou imagens que representam o estilo que você imagina. Pode enviar até ${MAX_IMAGES}.`}
     >
       <button
         type="button"
